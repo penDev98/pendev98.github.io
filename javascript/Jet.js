@@ -85,32 +85,39 @@ class Jet {
         this.vx = 0;
     }
 
+    animateHealth() {
+        let yPos = 20;
+        let xPos = (window.innerWidth / 2) + 40;
+
+        this.healthArray.forEach(e => {
+            e.removeSelf();
+        })
+
+        this.healthArray = [];
+
+        for (let i = 0; i < this.health; i++) {
+            if (i % 6 === 0 && i !== 0) {
+                yPos += 60;
+                xPos -= 240;
+            }
+            let healthSprite = new Sprite(resources['assets/spaceship.png'].texture);
+            healthSprite.removeSelf = () => {
+                app.stage.removeChild(healthSprite);
+            }
+            healthSprite.scale.set(0.04, 0.04);
+            healthSprite.position.set(xPos + i * 40, yPos);
+            this.healthArray.push(healthSprite);
+            app.stage.addChild(healthSprite);
+        }
+    }
+
     updateHealth(amount) {
         this.health += amount;
         const health = document.getElementById("health");
 
-        let yPos = 20;
-        let xPos = (window.innerWidth / 2) + 40;
-
-        if (this.healthArray.length < 1) {
-            for (let i = 0; i <= this.health; i++) {
-                if (i % 6 === 0 && i !== 0) {
-                    yPos += 60;
-                    xPos -= 240;
-                }
-                let healthSprite = new Sprite(resources['assets/spaceship.png'].texture);
-                healthSprite.removeSelf = () => {
-                    app.stage.removeChild(healthSprite);
-                }
-                healthSprite.scale.set(0.04, 0.04);
-                healthSprite.position.set(xPos + i * 40, yPos);
-                this.healthArray.push(healthSprite);
-                app.stage.addChild(healthSprite);
-            }
-        }
         if (amount < 0) {
-            this.healthArray[this.health + 1].removeSelf();
-            this.healthArray.pop(this.health + 1);
+            this.healthArray[this.health].removeSelf();
+            this.healthArray.pop();
         }
 
         TweenLite.to(health, 1, { scale: 1.5, ease: Power4.easeOut });
