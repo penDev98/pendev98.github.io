@@ -8,25 +8,43 @@ body{
     background-image: url('../assets/background.png');
 }
 
-#score, #health, #level, #begin, #end {
+#infographics{
+    display: flex;
+    justify-content: space-between;
+}
+
+#score, #health, #level {
+    font-size: 1.7rem;
     position: absolute;
     color: White;
-    margin: 1rem 0 0 2rem;
     font-weight: 200;
-    top: -100px;
-}
-
-#health {
-    left: 400px;
-}
-
-#level {
-    left: 800px;
+    top: -80px;
 }
 
 #begin, #end {
-    left: 28%;
-    top: 42%;
+    position: absolute;
+    color: White;
+    font-weight: 200;
+}
+
+#score{
+    left: 15%;
+}
+
+#health {
+    left: 47%;
+}
+
+#level {
+    left: 80%;
+}
+
+#begin, #end {
+    left: 0; 
+    right: 0; 
+    top: 40%;
+    margin: auto;
+    width: 350px;
     font-size: 4rem;
     background-color: rgb(141, 40, 40);
     border-radius: 20px;
@@ -37,8 +55,11 @@ body{
 #begin:hover, #end:hover{
     cursor: pointer;
     font-size: 4.2rem;
-    left: 27.5%;
-    top: 41.7%;
+    left: 0; 
+    right: 0; 
+    top: 40%;
+    margin: auto;
+    width: 360px;
 }
 
 #end {

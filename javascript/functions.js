@@ -16,7 +16,7 @@ const updateLevel = (lvl, enemy) => {
         enemy.texture = "assets/enemy2.png";
     }
 
-    TweenLite.to(level, 1, { y: 430, x: -350, scale: 5, ease: Power1.easeOut });
+    TweenLite.to(level, 1, { y: window.innerHeight/2, x: -window.innerWidth/3, scale: 5, ease: Power1.easeOut });
     TweenLite.to(level, 1, { y: 100, x: 0, scale: 1, ease: Power1.easeOut, delay: 2 });
 
     intervals.push(setInterval(() => {
@@ -75,7 +75,7 @@ const stopGame = (jet, enemy, boss) => {
 
     TweenLite.to(health, 1, { y: -100, scale: 0, opacity: 0, ease: Power1.easeIn });
     TweenLite.to(level, 2, { scale: 0, ease: Power1.easeOut });
-    TweenLite.to(scoreElement, 2, { y: 550, x: 410, scale: 1, ease: Power1.easeOut });
+    TweenLite.to(scoreElement, 2, { y: (window.innerHeight / 2) + 100, x: (window.innerWidth / 3) - 40, scale: 1, ease: Power1.easeOut });
     TweenLite.to(end, 2, { scale: 1, opacity: 1, ease: Power1.easeOut });
 
 

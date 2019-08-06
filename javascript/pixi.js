@@ -2,6 +2,11 @@ const app = new PIXI.Application({
     width: 1000, height: 800, antialias: true, resolution: window.devicePixelRatio, transparent: true || 1,
 });
 
+// app.renderer.view.style.position = "absolute";
+app.renderer.view.style.display = "block";
+app.renderer.autoResize = true;
+app.renderer.resize(window.innerWidth, window.innerHeight);
+
 document.body.appendChild(app.view);
 
 const Sprite = PIXI.Sprite,
@@ -28,7 +33,7 @@ function setup() {
     bg.zIndex = 3;
     app.stage.addChild(bg);
 
-    let jet = new Jet(app.view.width / 2, app.view.height - 75, 0.2, 4, "assets/spaceship.png")
+    let jet = new Jet(app.view.width / 2, app.view.height - 75, 0.2, 0, "assets/spaceship.png")
     let enemy = new Enemy(33, "assets/enemy.png", 2, 1.5, 2.5, 310, 2000, 3000, 0.03, 70, 35);
     let boss = new Enemy(1, "assets/white-plane.png", 1000, 5, 5, 500, 800, 1000, 0.1, 200, 110);
 
