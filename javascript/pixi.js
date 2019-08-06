@@ -24,6 +24,7 @@ loader
     .add("assets/healthbar.png")
     .add("assets/dragon2.png")
     .add("assets/white-plane.png")
+    .add("assets/heart.png")
     .load(setup);
 
 function setup() {

@@ -86,7 +86,7 @@ class Jet {
     }
 
     animateHealth() {
-        let yPos = 20;
+        let yPos = 25;
         let xPos = (window.innerWidth / 2) + 40;
 
         this.healthArray.forEach(e => {
@@ -100,12 +100,12 @@ class Jet {
                 yPos += 60;
                 xPos -= 240;
             }
-            let healthSprite = new Sprite(resources['assets/spaceship.png'].texture);
+            let healthSprite = new Sprite(resources['assets/heart.png'].texture);
             healthSprite.removeSelf = () => {
                 app.stage.removeChild(healthSprite);
             }
             healthSprite.scale.set(0.04, 0.04);
-            healthSprite.position.set(xPos + i * 40, yPos);
+            healthSprite.position.set(xPos + i * 30, yPos);
             this.healthArray.push(healthSprite);
             app.stage.addChild(healthSprite);
         }
