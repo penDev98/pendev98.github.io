@@ -11,12 +11,12 @@ const endBtn = document.getElementById('end');
 const intervals = [];
 
 const updateLevel = (lvl, enemy) => {
-    level.innerHTML = `Level: ${lvl}`;
+    level.innerHTML = `Level ${lvl}`;
     if (level % 2 === 0) {
         enemy.texture = "assets/enemy2.png";
     }
 
-    TweenLite.to(level, 1, { y: window.innerHeight/2, x: -window.innerWidth/3, scale: 5, ease: Power1.easeOut });
+    TweenLite.to(level, 1, { y: window.innerHeight / 2, x: -window.innerWidth / 3, scale: 5, ease: Power1.easeOut });
     TweenLite.to(level, 1, { y: 100, x: 0, scale: 1, ease: Power1.easeOut, delay: 2 });
 
     intervals.push(setInterval(() => {
@@ -35,7 +35,7 @@ const randomInt = (min, max) => {
 
 const addScore = (newScore) => {
     score += newScore;
-    document.getElementById("score").innerHTML = `Score: ${score}`;
+    document.getElementById("score").innerHTML = `Score ${score}`;
     TweenLite.to(scoreElement, 1, { scale: 1.5, ease: Power4.easeOut });
     TweenLite.to(scoreElement, 1, { scale: 1, ease: Power4.easeOut, delay: 0.1 });
 }
@@ -54,7 +54,7 @@ const startGame = (jet, enemy, boss) => {
 
     if (jet.health !== undefined) {
         jet.restart();
-        level.innerHTML = 'Level: 0';
+        level.innerHTML = 'Level 0';
         TweenLite.to(level, 1, { y: 430, x: -350, scale: 5, ease: Power1.easeOut });
         TweenLite.to(level, 1, { y: 100, x: 0, scale: 1, ease: Power1.easeOut, delay: 2 });
         score = 0;

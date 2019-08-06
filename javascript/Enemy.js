@@ -64,7 +64,7 @@ class Enemy {
         let enemyY = -140;
         let enemyX = 10;
         for (let i = 1; i <= this.amount; i++) {
-            let enemy = new Sprite(resources[this.texture].texture);
+            let enemy = new Sprite(resources[i > 22 ? this.texture : 'assets/enemy.png'].texture);
             enemy.scale.set(0.2, 0.2);
             enemy.anchor.set(0.5, 1);
             enemyX = i * 80;
