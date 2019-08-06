@@ -65,7 +65,13 @@ class Jet {
         return this.missiles;
     }
 
-    animate() {
+    animate(width) {
+        if (this.texture.x <= 10) {
+            this.texture.x = 10;
+        }
+        if (this.texture.x >= width - 10) {
+            this.texture.x = width - 10;
+        }
         this.texture.x += this.vx;
         this.x = this.texture.x;
     }

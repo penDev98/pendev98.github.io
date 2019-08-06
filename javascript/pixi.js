@@ -90,7 +90,7 @@ function setup() {
             level = 0;
         }
 
-        jet.animate();
+        jet.animate(app.view.width);
 
         if (level === 5) {
             jet.shooting(boss);
