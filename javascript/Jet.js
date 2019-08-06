@@ -97,8 +97,8 @@ class Jet {
 
         for (let i = 0; i < this.health; i++) {
             if (i % 6 === 0 && i !== 0) {
-                yPos += 60;
-                xPos -= 240;
+                yPos += 30;
+                xPos -= 180;
             }
             let healthSprite = new Sprite(resources['assets/heart.png'].texture);
             healthSprite.removeSelf = () => {
