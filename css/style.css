@@ -8,11 +8,6 @@ body{
     background-image: url('../assets/background.png');
 }
 
-#infographics{
-    display: flex;
-    justify-content: space-between;
-}
-
 #score, #health, #level {
     font-size: 1.7rem;
     position: absolute;
