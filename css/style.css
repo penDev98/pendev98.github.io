@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+body{
+    background-image: url('../assets/background.png');
+}
+
+#score, #health, #level, #begin, #end {
+    position: absolute;
+    color: White;
+    margin: 1rem 0 0 2rem;
+    font-weight: 200;
+    top: -100px;
+}
+
+#health {
+    left: 400px;
+}
+
+#level {
+    left: 800px;
+}
+
+#begin, #end {
+    left: 28%;
+    top: 42%;
+    font-size: 4rem;
+    background-color: rgb(141, 40, 40);
+    border-radius: 20px;
+    padding: 0 20px;
+    font-weight: 600;
+}
+
+#begin:hover, #end:hover{
+    cursor: pointer;
+    font-size: 4.2rem;
+    left: 27.5%;
+    top: 41.7%;
+}
+
+#end {
+    display: none;
+}
+
+#end:hover span {
+    display: none;
+}
+
+#end:hover:before {content: "New Game"}
