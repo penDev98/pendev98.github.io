@@ -16,6 +16,7 @@ class Jet {
     }
 
     restart() {
+        this.health = 0;
         this.updateHealth(4);
         this.x = app.view.width / 2;
         this.y = app.view.height - 75
