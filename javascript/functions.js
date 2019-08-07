@@ -72,12 +72,11 @@ startBtn.addEventListener('click', startGame)
 
 const stopGame = (jet, enemy, boss) => {
     endBtn.style.display = 'block';
-
+    
     TweenLite.to(health, 1, { y: -100, scale: 0, opacity: 0, ease: Power1.easeIn });
     TweenLite.to(level, 2, { scale: 0, ease: Power1.easeOut });
-    TweenLite.to(scoreElement, 2, { y: (window.innerHeight / 2) + 100, x: (window.innerWidth / 3) - 40, scale: 1, ease: Power1.easeOut });
+    TweenLite.to(scoreElement, 2, { y: (window.innerHeight / 2) + 100, x: (window.innerWidth / 3) - 50, scale: 1, ease: Power1.easeOut });
     TweenLite.to(end, 2, { scale: 1, opacity: 1, ease: Power1.easeOut });
-
 
     app.ticker.stop();
     endBtn.addEventListener('click', () => startGame(jet, enemy, boss));

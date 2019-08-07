@@ -13,6 +13,7 @@ class Jet {
         this.missiles = [];
         this.shaking = false;
         this.speed = 0;
+        this.continue = true;
     }
 
     restart() {
@@ -87,38 +88,51 @@ class Jet {
     }
 
     animateHealth() {
-        let yPos = 25;
-        let xPos = (window.innerWidth / 2) + 40;
 
-        this.healthArray.forEach(e => {
-            e.removeSelf();
-        })
+        if (this.continue) {
+            let yPos = 25;
+            let xPos = (window.innerWidth / 2) + 40;
 
-        this.healthArray = [];
+            this.healthArray.forEach(e => {
+                e.removeSelf();
+            })
 
-        for (let i = 0; i < this.health; i++) {
-            if (i % 6 === 0 && i !== 0) {
-                yPos += 30;
-                xPos -= 180;
+            this.healthArray = [];
+
+            for (let i = 0; i < this.health; i++) {
+                if (i % 6 === 0 && i !== 0) {
+                    yPos += 30;
+                    xPos -= 180;
+                }
+                let healthSprite = new Sprite(resources['assets/heart.png'].texture);
+                healthSprite.removeSelf = () => {
+                    app.stage.removeChild(healthSprite);
+                }
+                healthSprite.scale.set(0.04, 0.04);
+                healthSprite.position.set(xPos + i * 30, yPos);
+                this.healthArray.push(healthSprite);
+                app.stage.addChild(healthSprite);
             }
-            let healthSprite = new Sprite(resources['assets/heart.png'].texture);
-            healthSprite.removeSelf = () => {
-                app.stage.removeChild(healthSprite);
-            }
-            healthSprite.scale.set(0.04, 0.04);
-            healthSprite.position.set(xPos + i * 30, yPos);
-            this.healthArray.push(healthSprite);
-            app.stage.addChild(healthSprite);
-        }
+        } else return
     }
 
     updateHealth(amount) {
         this.health += amount;
         const health = document.getElementById("health");
 
+        let removeItem = (array, item) => {
+            array[item].removeSelf();
+            array.pop();
+            this.continue = true;
+        }
+
         if (amount < 0) {
-            this.healthArray[this.health].removeSelf();
-            this.healthArray.pop();
+            if (this.health >= 1) {
+                TweenMax.to(this.healthArray[this.health], 1, { y: -50, ease: Power2.easeOut, onStart: this.continue = false, onComplete: removeItem, onCompleteParams: [this.healthArray, this.health] })
+            } else {
+                this.healthArray[this.health].removeSelf();
+                this.healthArray.pop();
+            }
         }
 
         TweenLite.to(health, 1, { scale: 1.5, ease: Power4.easeOut });
