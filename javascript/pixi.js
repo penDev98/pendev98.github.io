@@ -1,5 +1,5 @@
 const app = new PIXI.Application({
-    width: 1000, height: 800, antialias: true, resolution: window.devicePixelRatio, transparent: true || 1,
+    antialias: true, resolution: 1, autoResize: true, transparent: true || 1,
 });
 
 app.renderer.view.style.display = "block";
