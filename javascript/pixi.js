@@ -25,6 +25,7 @@ loader
     .add("assets/dragon2.png")
     .add("assets/white-plane.png")
     .add("assets/heart.png")
+    .add('spritesheet', 'assets/spritesheet/mc.json')
     .load(setup);
 
 function setup() {

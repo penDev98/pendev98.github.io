@@ -220,21 +220,44 @@ class Jet {
             if (m.position.y < -100) {
                 addScore(-10)
                 this.updateSpeed(score);
-                this.missiles[i].removeSelf();
+                m.removeSelf();
                 this.missiles.splice(i, 1);
+                if (i > 0) {
+                    i--;
+                }
             }
 
             for (let j = 0; j < enemy.getEnemies().length; j++) {
                 const e = enemy.getEnemies()[j];
 
-                if (m.position.y < e.position.y - enemy.getHeight() && m.position.x > e.position.x - enemy.getWidth() && m.position.x < e.position.x + enemy.getWidth()) {
+                if (m.position.y < e.position.y - enemy.getHeight() && m.position.y > e.position.y - enemy.getHeight() * 2 && m.position.x > e.position.x - enemy.getWidth() && m.position.x < e.position.x + enemy.getWidth()) {
                     try {
-                        this.missiles[i].removeSelf();
+                        m.removeSelf();
+                        this.missiles.splice(i, 1);
+                        if (i > 0) {
+                            i--;
+                        }
+
+                        const explosionTextures = [];
+                        let k;
+
+                        for (k = 0; k < 26; k++) {
+                            const texture = PIXI.Texture.from(`Explosion_Sequence_A ${k + 1}.png`);
+                            explosionTextures.push(texture);
+                        }
+
+                        const explosion = new PIXI.AnimatedSprite(explosionTextures);
+                        explosion.scale.set(0.5, 0.5)
+                        explosion.position.set(m.x - 60, m.y)
+                        explosion.gotoAndPlay(1);
+                        explosion.removeSelf = () => {
+                            app.stage.removeChild(explosion);
+                        }
+                        setTimeout(() => { explosion.stop(); explosion.removeSelf() }, 400)
+                        app.stage.addChild(explosion);
                     } catch (e) {
                         console.log(e);
                     }
-                    this.missiles.splice(i, 1);
-
                     enemy.getEnemies()[j].health--;
                     addScore(10);
                     this.updateSpeed(score);

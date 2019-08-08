@@ -176,6 +176,23 @@ class Enemy {
 
             if (m.position.y > app.view.height - 150 && m.position.x > jet.getX() - 80 && m.position.x < jet.getX() + 80) {
                 m.removeSelf();
+                const explosionTextures = [];
+                let j;
+
+                for (j = 0; j < 26; j++) {
+                    const texture = PIXI.Texture.from(`Explosion_Sequence_A ${j + 1}.png`);
+                    explosionTextures.push(texture);
+                }
+
+                const explosion = new PIXI.AnimatedSprite(explosionTextures);
+                explosion.scale.set(0.8, 0.8)
+                explosion.position.set(m.x - 60, m.y)
+                explosion.gotoAndPlay(1);
+                explosion.removeSelf = () => {
+                    app.stage.removeChild(explosion);
+                }
+                setTimeout(() => { explosion.stop(); explosion.removeSelf() }, 400)
+                app.stage.addChild(explosion);
                 this.missiles.splice(i, 1);
                 jet.updateHealth(-1);
                 jet.startShaking();
