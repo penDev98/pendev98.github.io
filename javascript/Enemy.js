@@ -16,6 +16,7 @@ class Enemy {
         this.speedMax = speedMax;
         this.height = height;
         this.width = width;
+        this.healthbarWidth = 0;
         this.startSpawn = true;
     }
 
@@ -61,7 +62,7 @@ class Enemy {
     }
 
     spawn() {
-        let enemyY = -140;
+        let enemyY = -160;
         let enemyX = 10;
 
         for (let i = 1; i <= this.amount; i++) {
@@ -70,7 +71,7 @@ class Enemy {
             enemy.anchor.set(0.5, 1);
             enemyX = i * 80;
             if (i > 11) {
-                enemyY = -70;
+                enemyY = -80;
                 enemyX = (i - 11) * 80;
             }
             if (i > 22) {
@@ -79,6 +80,12 @@ class Enemy {
             }
             enemy.position.set(enemyX + 20, enemyY)
             enemy.health = this.health;
+
+            enemy.healthbar = new Sprite(resources["assets/healthbar2.png"].texture);
+            enemy.healthbar.scale.set(this.width / 250, this.width / 250);
+            this.healthbarWidth = enemy.healthbar.width * 2;
+            app.stage.addChild(enemy.healthbar);
+
             enemy.vx = this.speed
             enemy.vy = this.speed;
 
@@ -104,6 +111,7 @@ class Enemy {
 
             enemy.removeSelf = () => {
                 app.stage.removeChild(enemy);
+                app.stage.removeChild(enemy.healthbar);
             }
 
             this.enemies.push(enemy);
@@ -130,6 +138,10 @@ class Enemy {
                 jet.updateSpeed(score);
                 this.enemies.splice(i, 1);
             }
+
+            e.healthbar.position.set(this.amount === 1 ? e.x - 130 : e.x - 35, e.y + 10);
+
+            TweenMax.to(e.healthbar, 1, { width: this.healthbarWidth * (e.health / this.health), ease: Power2.easeOut })
 
             if (e.position.x >= app.view.width - this.width) {
                 this.vx = -this.speed;

@@ -25,6 +25,7 @@ loader
     .add("assets/dragon2.png")
     .add("assets/white-plane.png")
     .add("assets/heart.png")
+    .add('assets/healthbar2.png')
     .add('spritesheet', 'assets/spritesheet/mc.json')
     .load(setup);
 
@@ -36,7 +37,7 @@ function setup() {
 
     let jet = new Jet(app.view.width / 2, app.view.height - 75, 0.2, 4, "assets/spaceship.png")
     let enemy = new Enemy(33, "assets/enemy.png", 2, 1.5, 2.5, 310, 2000, 3000, 0.03, 70, 35);
-    let boss = new Enemy(1, "assets/white-plane.png", 1000, 5, 5, 500, 800, 1000, 0.1, 200, 110);
+    let boss = new Enemy(1, "assets/white-plane.png", 1000, 5, 5, 500, 800, 1000, 0.1, 200, 150);
 
     let level = 0;
 
