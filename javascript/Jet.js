@@ -247,8 +247,9 @@ class Jet {
                         }
 
                         const explosion = new PIXI.AnimatedSprite(explosionTextures);
-                        explosion.scale.set(0.5, 0.5)
-                        explosion.position.set(m.x - 60, m.y)
+                        let randomScale = randomInt(3, 4) / 10;
+                        explosion.scale.set(randomScale, randomScale);
+                        explosion.position.set(e.x - 40, m.y+20)
                         explosion.gotoAndPlay(1);
                         explosion.removeSelf = () => {
                             app.stage.removeChild(explosion);
