@@ -17,13 +17,20 @@ loader
     .add("assets/background.png")
     .add("assets/spaceship.png")
     .add("assets/missile.png")
-    .add("assets/enemy.png")
+    .add("assets/enemy0.png")
+    .add("assets/enemy1.png")
     .add("assets/enemy2.png")
+    .add("assets/enemy3.png")
+    .add("assets/enemy4.png")
+    .add("assets/enemy5.png")
+    .add("assets/enemy6.png")
+    .add("assets/enemy7.png")
+    .add("assets/enemy8.png")
+    .add("assets/enemy9.png")
+    .add("assets/enemy10.png")
+    .add("assets/enemy11.png")
     .add("assets/bullet.png")
     .add("assets/enemyBullet.png")
-    .add("assets/healthbar.png")
-    .add("assets/dragon2.png")
-    .add("assets/white-plane.png")
     .add("assets/heart.png")
     .add('assets/healthbar2.png')
     .add('spritesheet', 'assets/spritesheet/mc.json')
@@ -35,9 +42,10 @@ function setup() {
     bg.zIndex = 3;
     app.stage.addChild(bg);
 
+
     let jet = new Jet(app.view.width / 2, app.view.height - 75, 0.2, 4, "assets/spaceship.png")
-    let enemy = new Enemy(33, "assets/enemy.png", 2, 1.5, 2.5, 310, 2000, 3000, 0.03, 70, 35);
-    let boss = new Enemy(1, "assets/white-plane.png", 1000, 5, 5, 500, 800, 1000, 0.1, 200, 150);
+    let enemy = new Enemy(33, 2, 1.5, 2.5, 310, 2000, 3000, 0.03, 70, 35);
+    let boss = new Enemy(1, 1000, 5, 5, 500, 800, 1000, 0.1, 300, 150);
 
     let level = 0;
 
@@ -96,28 +104,28 @@ function setup() {
         jet.animate(app.view.width);
         jet.animateHealth();
 
-        if (level === 5) {
-            jet.shooting(boss);
+        if (level % 5 === 0) {
+            jet.shooting(boss, level);
             if (boss.getShouldSpawn()) {
-                boss.animate(jet, bg);
+                boss.animate(jet, bg, level);
                 boss.shoot(jet);
             } else {
                 setTimeout(() => {
-                    boss.animate(jet, bg);
+                    boss.animate(jet, bg, level);
                     boss.shoot(jet);
                     boss.setShouldSpawn(true)
                 }, 1500)
             }
         }
         else {
-            jet.shooting(enemy);
+            jet.shooting(enemy, level);
             if (enemy.getShouldSpawn()) {
-                enemy.animate(jet, bg);
+                enemy.animate(jet, bg, level);
                 enemy.shoot(jet);
             }
             else {
                 setTimeout(() => {
-                    enemy.animate(jet, bg);
+                    enemy.animate(jet, bg, level);
                     enemy.shoot(jet);
                     enemy.setShouldSpawn(true)
                 }, 1500)
@@ -133,14 +141,14 @@ function setup() {
             jet.getMissiles().length = 0;
             jet.updateHealth(1);
 
-            if (level === 5) {
+            if (level % 5 === 0) {
                 updateLevel(level, boss);
-                boss.spawn();
+                boss.spawn(level);
                 boss.setShouldSpawn(false);
             }
             else {
                 updateLevel(level, enemy);
-                enemy.spawn();
+                enemy.spawn(level);
                 enemy.setShouldSpawn(false);
             }
         }

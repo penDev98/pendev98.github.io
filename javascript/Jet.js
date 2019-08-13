@@ -203,7 +203,7 @@ class Jet {
         app.stage.updateLayersOrder();
     }
 
-    shooting(enemy) {
+    shooting(enemy, level) {
         for (let i = 0; i < this.missiles.length; i++) {
             let m = this.missiles[i];
 
@@ -230,7 +230,7 @@ class Jet {
             for (let j = 0; j < enemy.getEnemies().length; j++) {
                 const e = enemy.getEnemies()[j];
 
-                if (m.position.y < e.position.y - enemy.getHeight() && m.position.y > e.position.y - enemy.getHeight() * 2 && m.position.x > e.position.x - enemy.getWidth() && m.position.x < e.position.x + enemy.getWidth()) {
+                if (m.position.y < e.position.y - enemy.getHeight() / 2 && m.position.y > e.position.y - enemy.getHeight() && m.position.x > e.position.x - enemy.getWidth() && m.position.x < e.position.x + enemy.getWidth()) {
                     try {
                         m.removeSelf();
                         this.missiles.splice(i, 1);
@@ -259,7 +259,7 @@ class Jet {
                     } catch (e) {
                         console.log(e);
                     }
-                    enemy.getEnemies()[j].health--;
+                    enemy.getEnemies()[j].health -= level;
                     addScore(10);
                     this.updateSpeed(score);
                     enemy.getEnemies()[j].shake = true;

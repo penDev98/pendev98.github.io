@@ -1,7 +1,6 @@
 class Enemy {
-    constructor(amount, texture, health, speed, movement, enemiesPos, speedMin, speedMax, bulletSize, height, width) {
+    constructor(amount, health, speed, movement, enemiesPos, speedMin, speedMax, bulletSize, height, width) {
         this.amount = amount;
-        this.texture = texture;
         this.health = health;
         this.speed = speed;
         this.vx = movement;
@@ -61,14 +60,19 @@ class Enemy {
         this.health = health;
     }
 
-    spawn() {
+    spawn(level) {
         let enemyY = -160;
         let enemyX = 10;
 
+        let enemyTexture = level;
+        if (level > 11) {
+            enemyTexture = level -= 10;
+        }
+
         for (let i = 1; i <= this.amount; i++) {
-            let enemy = new Sprite(resources[this.amount !== 1 ? (i > 11 && i <= 22 ? this.texture : 'assets/enemy2.png') : 'assets/white-plane.png'].texture);
+            let enemy = new Sprite(resources[`assets/enemy${enemyTexture}.png`].texture);
             enemy.scale.set(0.2, 0.2);
-            enemy.anchor.set(0.5, 1);
+            enemy.anchor.set(0.5, 0.5);
             enemyX = i * 80;
             if (i > 11) {
                 enemyY = -80;
@@ -122,7 +126,7 @@ class Enemy {
         this.positioned = true;
     }
 
-    animate(jet, bg) {
+    animate(jet, bg, level) {
         for (let i = 0; i < this.enemies.length; i++) {
             const e = this.enemies[i];
 
@@ -139,7 +143,12 @@ class Enemy {
                 this.enemies.splice(i, 1);
             }
 
-            e.healthbar.position.set(this.amount === 1 ? e.x - 130 : e.x - 35, e.y + 10);
+            if (level === 6 || level === 16) {
+                e.rotation += 0.03;
+            }
+
+
+            e.healthbar.position.set(this.amount === 1 ? e.x - 130 : e.x - 35, e.y + this.height / 2);
 
             TweenMax.to(e.healthbar, 1, { width: this.healthbarWidth * (e.health / this.health), ease: Power2.easeOut })
 
@@ -162,7 +171,7 @@ class Enemy {
             e.position.y += this.vy;
 
             if (e.shake === true) {
-                e.position.x -= randomInt(-1, 1);
+
             }
         }
     }
