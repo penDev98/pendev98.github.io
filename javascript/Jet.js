@@ -14,6 +14,10 @@ class Jet {
         this.shaking = false;
         this.speed = 0;
         this.continue = true;
+        this.shootSound = new Howl({ src: ['assets/sounds/laser1.mp3'] });
+        this.missileSound = new Howl({ src: ['assets/sounds/missileShort.mp3'] });
+        this.explosion = new Howl({ src: ['assets/sounds/underwaterBoom.wav'] });
+        this.damageSound = new Howl({ src: ['assets/sounds/jetDamage.mp3'] });
     }
 
     restart() {
@@ -45,7 +49,7 @@ class Jet {
     }
 
     updateSpeed(score) {
-        this.speed = Math.floor(score / (2000 * (this.speed + 1)));
+        this.speed = Math.floor(score / 10000);
     }
 
     getHealth() {
@@ -145,12 +149,14 @@ class Jet {
             setTimeout(() => this.shootBullet(), 300 / (i * 2));
             if (this.speed >= 2) {
                 this.shootMissile();
+                this.missileSound.play();
                 setTimeout(() => this.shootMissile(), 300 / i * 2);
             }
         }
     }
 
     shootBullet() {
+        this.shootSound.play();
         let bullet = new Sprite(resources["assets/bullet.png"].texture);
         bullet.rotation = 3.15;
         bullet.anchor.set(0.5, 0);
@@ -260,6 +266,7 @@ class Jet {
                         console.log(e);
                     }
                     enemy.getEnemies()[j].health -= level;
+                    this.explosion.play();
                     addScore(10);
                     this.updateSpeed(score);
                     enemy.getEnemies()[j].shake = true;

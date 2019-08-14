@@ -8,6 +8,13 @@ const scoreElement = document.getElementById('score');
 const startBtn = document.getElementById('begin');
 const endBtn = document.getElementById('end');
 
+const startSound = new Howl({ src: ['assets/sounds/rez-drone-looping.mp3'] });
+startSound.play()
+
+let shootsound = new Howl({ src: ['assets/sounds/cannon.mp3'] });
+
+let interval = setInterval(() => { startSound.play() }, 12000);
+
 const intervals = [];
 
 const updateLevel = (lvl, enemy) => {
@@ -23,6 +30,7 @@ const updateLevel = (lvl, enemy) => {
         randomEnemy = randomInt(0, enemy.getEnemies().length - 1);
         try {
             enemy.getEnemies()[randomEnemy].shoot();
+            shootsound.play();
         } catch (e) {
             console.log(e)
         }
@@ -45,6 +53,9 @@ stopShaking = (element) => {
 }
 
 const startGame = (jet, enemy, boss) => {
+    startSound.stop();
+    clearInterval(interval)
+
     TweenLite.to(end, 1, { scale: 0, opacity: 0, ease: Power1.easeOut });
     startBtn.style.cursor = 'default';
     TweenLite.to(level, 1, { y: 100, scale: 1, ease: Power1.easeOut });
