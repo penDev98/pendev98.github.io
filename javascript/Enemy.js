@@ -18,7 +18,7 @@ class Enemy {
         this.healthbarWidth = 0;
         this.startSpawn = true;
         this.spawnSound = new Howl({ src: ['assets/sounds/coming.mp3'] });
-        this.animateSound = new Howl({ src: [`assets/sounds/${this.amount > 1 ? 'ship.flac' : 'chime.mp3'}`] });
+        this.animateSound = new Howl({ src: [`assets/sounds/${this.amount > 1 ? null : 'chime.mp3'}`] });
         this.interval;
     }
 
