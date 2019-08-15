@@ -16,7 +16,7 @@ body{
     top: -80px;
 }
 
-#begin, #end {
+#begin, #end, #mute-btn {
     position: absolute;
     color: White;
     font-weight: 200;
@@ -47,11 +47,9 @@ body{
     font-weight: 600;
 }
 
-#begin:hover, #end:hover{
+#begin:hover, #end:hover {
     cursor: pointer;
     font-size: 4.2rem;
-    left: 0; 
-    right: 0; 
     top: 40%;
     margin: auto;
     width: 360px;
@@ -63,6 +61,21 @@ body{
 
 #end:hover span {
     display: none;
+}
+
+#mute-btn{
+    left: 93%; 
+    right: 0; 
+    top: 0.5%;
+    margin: auto;
+    font-size: 3rem;
+}
+
+#mute-btn:hover{
+    cursor: pointer;
+    font-size: 4rem;
+    left: 92.5%; 
+    right: 0; 
 }
 
 #end:hover:before {content: "New Game"}

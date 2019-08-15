@@ -7,6 +7,7 @@ const health = document.getElementById('health');
 const scoreElement = document.getElementById('score');
 const startBtn = document.getElementById('begin');
 const endBtn = document.getElementById('end');
+const muteBtn = document.getElementById('mute-btn');
 
 const startSound = new Howl({ src: ['assets/sounds/rez-drone-looping.mp3'] });
 startSound.play()
@@ -92,3 +93,16 @@ const stopGame = (jet, enemy, boss) => {
     app.ticker.stop();
     endBtn.addEventListener('click', () => startGame(jet, enemy, boss));
 }
+
+const toggleMute = () => {
+    if(muteBtn.innerHTML == `<i class="fa fa-volume-off"></i>`){
+        muteBtn.innerHTML = `<i class="fa fa-volume-up"></i>`;
+        Howler.mute(false);
+    }
+    else {
+        muteBtn.innerHTML = `<i class="fa fa-volume-off"></i>`;
+        Howler.mute(true);
+    }
+}
+
+muteBtn.addEventListener('click', toggleMute)
