@@ -12,6 +12,8 @@ const muteBtn = document.getElementById('mute-btn');
 const startSound = new Howl({ src: ['assets/sounds/rez-drone-looping.mp3'] });
 startSound.play()
 
+const gameOverSound = new Howl({ src: ['assets/sounds/gameover.mp3'] });
+
 let shootsound = new Howl({ src: ['assets/sounds/cannon.mp3'] });
 
 let interval = setInterval(() => { startSound.play() }, 12000);
@@ -55,7 +57,9 @@ stopShaking = (element) => {
 
 const startGame = (jet, enemy, boss) => {
     startSound.stop();
-    clearInterval(interval)
+    gameOverSound.stop();
+
+    clearInterval(interval);
 
     TweenLite.to(end, 1, { scale: 0, opacity: 0, ease: Power1.easeOut });
     startBtn.style.cursor = 'default';
@@ -85,6 +89,12 @@ startBtn.addEventListener('click', startGame)
 const stopGame = (jet, enemy, boss) => {
     endBtn.style.display = 'block';
 
+    gameOverSound.play();
+
+    intervals.forEach(i => {
+        clearInterval(i);
+    })
+
     TweenLite.to(health, 1, { y: -100, scale: 0, opacity: 0, ease: Power1.easeIn });
     TweenLite.to(level, 2, { scale: 0, ease: Power1.easeOut });
     TweenLite.to(scoreElement, 2, { y: (window.innerHeight / 2) + 100, x: (window.innerWidth / 3) - 50, scale: 1, ease: Power1.easeOut });
@@ -95,7 +105,7 @@ const stopGame = (jet, enemy, boss) => {
 }
 
 const toggleMute = () => {
-    if(muteBtn.innerHTML == `<i class="fa fa-volume-off"></i>`){
+    if (muteBtn.innerHTML == `<i class="fa fa-volume-off"></i>`) {
         muteBtn.innerHTML = `<i class="fa fa-volume-up"></i>`;
         Howler.mute(false);
     }

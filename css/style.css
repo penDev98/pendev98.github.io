@@ -73,9 +73,7 @@ body{
 
 #mute-btn:hover{
     cursor: pointer;
-    font-size: 4rem;
-    left: 92.5%; 
-    right: 0; 
+    font-size: 3.3rem;
 }
 
 #end:hover:before {content: "New Game"}

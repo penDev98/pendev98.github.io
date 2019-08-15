@@ -16,7 +16,7 @@ class Jet {
         this.continue = true;
         this.shootSound = new Howl({ src: ['assets/sounds/laser1.mp3'] });
         this.missileSound = new Howl({ src: ['assets/sounds/missileShort.mp3'] });
-        this.explosion = new Howl({ src: ['assets/sounds/underwaterBoom.wav'] });
+        this.explosion = new Howl({ src: ['assets/sounds/jetDamage.mp3'] });
         this.damageSound = new Howl({ src: ['assets/sounds/jetDamage.mp3'] });
     }
 
