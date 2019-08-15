@@ -15,8 +15,9 @@ startSound.play()
 const gameOverSound = new Howl({ src: ['assets/sounds/gameover.mp3'] });
 
 let shootsound = new Howl({ src: ['assets/sounds/cannon.mp3'] });
+shootsound.volume(0.3);
 
-let interval = setInterval(() => { startSound.play() }, 12000);
+startSound.loop(true);
 
 const intervals = [];
 
@@ -58,8 +59,6 @@ stopShaking = (element) => {
 const startGame = (jet, enemy, boss) => {
     startSound.stop();
     gameOverSound.stop();
-
-    clearInterval(interval);
 
     TweenLite.to(end, 1, { scale: 0, opacity: 0, ease: Power1.easeOut });
     startBtn.style.cursor = 'default';

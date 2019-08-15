@@ -18,8 +18,7 @@ class Enemy {
         this.healthbarWidth = 0;
         this.startSpawn = true;
         this.spawnSound = new Howl({ src: ['assets/sounds/coming.mp3'] });
-        this.animateSound = new Howl({ src: [`assets/sounds/${this.amount > 1 ? null : 'chime.mp3'}`] });
-        this.interval;
+        this.animateSound = new Howl({ src: ['assets/sounds/chime.mp3'] });
     }
 
     getHeight() {
@@ -61,11 +60,14 @@ class Enemy {
         this.missiles = [];
         this.enemies = [];
         this.health = health;
+        this.animateSound.stop();
     }
 
     spawn(level) {
-        this.animateSound.play();
-        this.interval = setInterval(() => { this.animateSound.play() }, this.amount > 1 ? 180000 : 4000);
+        if (this.amount === 1) {
+            this.animateSound.play();
+            this.animateSound.loop(true);
+        }
         this.spawnSound.play();
         let enemyY = -260;
         let enemyX = 10;
@@ -133,10 +135,6 @@ class Enemy {
     }
 
     animate(jet, bg, level) {
-        if (this.enemies.length <= 0) {
-            this.animateSound.stop()
-            clearInterval(this.interval);
-        }
         for (let i = 0; i < this.enemies.length; i++) {
             const e = this.enemies[i];
 
@@ -148,6 +146,7 @@ class Enemy {
 
             if (e.health <= 0) {
                 e.removeSelf();
+                this.animateSound.stop();
                 addScore(100)
                 jet.updateSpeed(score);
                 this.enemies.splice(i, 1);
@@ -175,7 +174,7 @@ class Enemy {
                 this.vy = -this.speed / 4;
             }
 
-            if (e.position.y < this.height) {
+            if (e.position.y < 150) {
                 this.vy = this.speed / 4;
             }
 
