@@ -16,7 +16,7 @@ body{
     top: -80px;
 }
 
-#begin, #end, #mute-btn {
+#begin, #end, #mute-btn, #loader {
     position: absolute;
     color: White;
     font-weight: 200;
@@ -35,10 +35,10 @@ body{
 }
 
 #begin, #end {
-    left: 0; 
-    right: 0; 
-    top: 40%;
-    margin: auto;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
     width: 350px;
     font-size: 4rem;
     background-color: rgb(141, 40, 40);
@@ -50,8 +50,6 @@ body{
 #begin:hover, #end:hover {
     cursor: pointer;
     font-size: 4.2rem;
-    top: 40%;
-    margin: auto;
     width: 360px;
 }
 
@@ -63,11 +61,19 @@ body{
     display: none;
 }
 
-#mute-btn{
+#mute-btn {
     left: 93%; 
     right: 0; 
     top: 0.5%;
     margin: auto;
+    font-size: 3rem;
+}
+
+#loader {
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
     font-size: 3rem;
 }
 

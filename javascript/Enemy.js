@@ -156,7 +156,6 @@ class Enemy {
                 e.rotation += 0.03;
             }
 
-
             e.healthbar.position.set(this.amount === 1 ? e.x - 130 : e.x - 35, e.y + this.height / 2);
 
             TweenMax.to(e.healthbar, 1, { width: this.healthbarWidth * (e.health / this.health), ease: Power2.easeOut })

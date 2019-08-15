@@ -5,9 +5,21 @@ let randomEnemy;
 const level = document.getElementById('level');
 const health = document.getElementById('health');
 const scoreElement = document.getElementById('score');
+const loadText = document.getElementById('loader');
 const startBtn = document.getElementById('begin');
 const endBtn = document.getElementById('end');
 const muteBtn = document.getElementById('mute-btn');
+
+startBtn.style.display = "none";
+
+TweenLite.to(loadText, 1.5, { scale: 3, opacity: 0, ease: Power4.easeIn });
+    
+setTimeout(() => {
+    loadText.style.display = "none";
+    startBtn.style.display = "block";
+
+    TweenLite.from(startBtn, 1.5, { scale: 0, opacity: 0, ease: Power4.easeOut });
+}, 1500)
 
 const startSound = new Howl({ src: ['assets/sounds/rez-drone-looping.mp3'] });
 startSound.play()
