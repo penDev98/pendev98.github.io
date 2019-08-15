@@ -45,16 +45,13 @@ body{
     border-radius: 20px;
     padding: 0 20px;
     font-weight: 600;
+    display: none;
 }
 
 #begin:hover, #end:hover {
     cursor: pointer;
-    font-size: 4.2rem;
-    width: 360px;
-}
-
-#end {
-    display: none;
+    /* font-size: 4.2rem;
+    width: 360px; */
 }
 
 #end:hover span {

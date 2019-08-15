@@ -10,10 +10,24 @@ const startBtn = document.getElementById('begin');
 const endBtn = document.getElementById('end');
 const muteBtn = document.getElementById('mute-btn');
 
-startBtn.style.display = "none";
+startBtn.addEventListener('mouseover', () => {
+    TweenLite.to(startBtn, 0.1, { scale: 1.2, ease: Power2.easeOut });
+});
+
+startBtn.addEventListener('mouseout', () => {
+    TweenLite.to(startBtn, 0.1, { scale: 1, ease: Power2.easeOut });
+});
+
+endBtn.addEventListener('mouseover', () => {
+    TweenLite.to(endBtn, 0.1, { scale: 1.2, ease: Power2.easeOut });
+});
+
+endBtn.addEventListener('mouseout', () => {
+    TweenLite.to(endBtn, 0.1, { scale: 1, ease: Power2.easeOut });
+});
 
 TweenLite.to(loadText, 1.5, { scale: 3, opacity: 0, ease: Power4.easeIn });
-    
+
 setTimeout(() => {
     loadText.style.display = "none";
     startBtn.style.display = "block";
@@ -108,8 +122,8 @@ const stopGame = (jet, enemy, boss) => {
 
     TweenLite.to(health, 1, { y: -100, scale: 0, opacity: 0, ease: Power1.easeIn });
     TweenLite.to(level, 2, { scale: 0, ease: Power1.easeOut });
-    TweenLite.to(scoreElement, 2, { y: (window.innerHeight / 2) + 100, x: (window.innerWidth / 3) - 50, scale: 1, ease: Power1.easeOut });
-    TweenLite.to(end, 2, { scale: 1, opacity: 1, ease: Power1.easeOut });
+    TweenLite.to(scoreElement, 2, { y: (window.innerHeight / 2) + 150, x: (window.innerWidth / 3) - 40, scale: 1, ease: Power1.easeOut });
+    TweenLite.to(end, 2, { scale: 1, opacity: 1, ease: Power1.easeIn });
 
     app.ticker.stop();
     endBtn.addEventListener('click', () => startGame(jet, enemy, boss));
