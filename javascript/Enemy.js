@@ -1,20 +1,34 @@
 class Enemy {
-    constructor(amount, health, speed, movement, enemiesPos, speedMin, speedMax, bulletSize, height, width) {
-        this.amount = amount;
-        this.health = health;
-        this.speed = speed;
-        this.vx = movement;
-        this.vy = movement / 2;
-        this.bulletSize = bulletSize;
+    constructor(type) {
+        if (type === 'boss') {
+            this.amount = 1;
+            this.health = 500;
+            this.speed = 5;
+            this.vx = 5;
+            this.startingPos = 500;
+            this.enemiesPos = 500;
+            this.speedMin = 800;
+            this.speedMax = 1000;
+            this.bulletSize = 0.1;
+            this.height = 300;
+            this.width = 150;
+        } else if (type === 'regular') {
+            this.amount = 33;
+            this.health = 2;
+            this.speed = 1.5;
+            this.vx = 2.5;
+            this.vy = 1.3;
+            this.startingPos = 310;
+            this.enemiesPos = 310;
+            this.speedMin = 2000;
+            this.speedMax = 3000;
+            this.bulletSize = 0.03;
+            this.height = 70;
+            this.width = 35;
+        }
+
         this.missiles = [];
-        this.enemies = [];
-        this.startingPos = enemiesPos;
-        this.enemiesPos = enemiesPos;
         this.positioned = false;
-        this.speedMin = speedMin;
-        this.speedMax = speedMax;
-        this.height = height;
-        this.width = width;
         this.healthbarWidth = 0;
         this.startSpawn = true;
         this.spawnSound = new Howl({ src: ['assets/sounds/coming.mp3'] });
@@ -44,10 +58,6 @@ class Enemy {
         return this.missiles;
     }
 
-    getEnemies() {
-        return this.enemies;
-    }
-
     setShouldSpawn(bool) {
         this.startSpawn = bool;
     }
@@ -57,8 +67,11 @@ class Enemy {
     }
 
     restart(health) {
+        this.missiles.forEach(m => {
+            m.removeSelf();
+        })
         this.missiles = [];
-        this.enemies = [];
+        enemies.length = 0;
         this.health = health;
         this.animateSound.stop();
     }
@@ -126,7 +139,7 @@ class Enemy {
                 app.stage.removeChild(enemy.healthbar);
             }
 
-            this.enemies.push(enemy);
+            enemies.push(enemy);
             app.stage.addChild(enemy);
         }
         this.enemiesPos = this.startingPos;
@@ -134,22 +147,16 @@ class Enemy {
         this.positioned = true;
     }
 
-    animate(jet, bg, level) {
-        for (let i = 0; i < this.enemies.length; i++) {
-            const e = this.enemies[i];
-
-            if (jet.shouldStartShaking() === true) {
-                jet.shake();
-                bg.position.x += randomInt(-1, 1);
-                bg.position.y += randomInt(-1, 1);
-            }
+    animate(jet, level) {
+        for (let i = 0; i < enemies.length; i++) {
+            const e = enemies[i];
 
             if (e.health <= 0) {
                 e.removeSelf();
                 this.animateSound.stop();
                 addScore(100)
                 jet.updateSpeed(score);
-                this.enemies.splice(i, 1);
+                enemies.splice(i, 1);
             }
 
             if (level === 6 || level === 16) {
@@ -178,16 +185,12 @@ class Enemy {
             }
 
             e.position.y += this.vy;
-
-            if (e.shake === true) {
-
-            }
         }
     }
 
     shoot(jet) {
         if (this.positioned) {
-            this.enemies.forEach(e => {
+            enemies.forEach(e => {
                 e.position.y += 3;
             })
             this.reduceEnemiesPos(3);
@@ -226,8 +229,6 @@ class Enemy {
                 this.missiles.splice(i, 1);
                 jet.updateHealth(-1);
                 jet.damageSound.play();
-                jet.startShaking();
-                jet.stopShaking();
             }
         }
     }

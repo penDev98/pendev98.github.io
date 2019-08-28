@@ -14,28 +14,27 @@ const Sprite = PIXI.Sprite,
     TextureCache = PIXI.utils.TextureCache;
 
 loader
-    .add("assets/background.png")
-    .add("assets/spaceship.png")
-    .add("assets/missile.png")
-    .add("assets/enemy0.png")
-    .add("assets/enemy1.png")
-    .add("assets/enemy2.png")
-    .add("assets/enemy3.png")
-    .add("assets/enemy4.png")
-    .add("assets/enemy5.png")
-    .add("assets/enemy6.png")
-    .add("assets/enemy7.png")
-    .add("assets/enemy8.png")
-    .add("assets/enemy9.png")
-    .add("assets/enemy10.png")
-    .add("assets/enemy11.png")
-    .add("assets/bullet.png")
-    .add("assets/enemyBullet.png")
-    .add("assets/heart.png")
-    .add('assets/healthbar2.png')
-    .add('spritesheet', 'assets/spritesheet/mc.json')
-    .add('assets/sounds/laser.wav')
-    .load(setup);
+    .add(["assets/background.png",
+        "assets/spaceship.png",
+        "assets/missile.png",
+        "assets/enemy0.png",
+        "assets/enemy1.png",
+        "assets/enemy2.png",
+        "assets/enemy3.png",
+        "assets/enemy4.png",
+        "assets/enemy5.png",
+        "assets/enemy6.png",
+        "assets/enemy7.png",
+        "assets/enemy8.png",
+        "assets/enemy9.png",
+        "assets/enemy10.png",
+        "assets/enemy11.png",
+        "assets/bullet.png",
+        "assets/enemyBullet.png",
+        "assets/heart.png",
+        'assets/healthbar2.png'])
+        .add('spritesheet', 'assets/spritesheet/mc.json')
+        .load(setup);
 
 function setup() {
     let bg = new Sprite(resources["assets/background.png"].texture);
@@ -43,17 +42,14 @@ function setup() {
     bg.zIndex = 4;
     app.stage.addChild(bg);
 
+    let jet = new Jet(app);
+    let enemy = new Enemy('regular');
+    let boss = new Enemy('boss');
 
-    let jet = new Jet(app.view.width / 2, app.view.height - 75, 0.2, 4, "assets/spaceship.png")
-    let enemy = new Enemy(33, 2, 1.5, 2.5, 310, 2000, 3000, 0.03, 70, 35);
-    let boss = new Enemy(1, 500, 5, 5, 500, 800, 1000, 0.1, 300, 150);
-
-    let level = 0;
+    let lvl = 0;
 
     let left = keyboard("ArrowLeft"),
-        up = keyboard("ArrowUp"),
         right = keyboard("ArrowRight"),
-        down = keyboard("ArrowDown"),
         space = keyboard(" ");
 
     left.press = () => {
@@ -99,57 +95,55 @@ function setup() {
 
         if (jet.getHealth() <= 0) {
             stopGame(jet, enemy, boss);
-            level = 0;
+            lvl = 0;
         }
 
         jet.animate(app.view.width);
         jet.animateHealth();
 
-        if (level % 5 === 0) {
-            jet.shooting(boss, level);
+        if (lvl % 5 === 0) {
             if (boss.getShouldSpawn()) {
-                boss.animate(jet, bg, level);
+                boss.animate(jet, bg, lvl);
                 boss.shoot(jet);
             } else {
                 setTimeout(() => {
-                    boss.animate(jet, bg, level);
+                    boss.animate(jet, bg, lvl);
                     boss.shoot(jet);
                     boss.setShouldSpawn(true)
                 }, 1500)
             }
         }
         else {
-            jet.shooting(enemy, level);
             if (enemy.getShouldSpawn()) {
-                enemy.animate(jet, bg, level);
+                enemy.animate(jet, bg, lvl);
                 enemy.shoot(jet);
             }
             else {
                 setTimeout(() => {
-                    enemy.animate(jet, bg, level);
+                    enemy.animate(jet, bg, lvl);
                     enemy.shoot(jet);
                     enemy.setShouldSpawn(true)
                 }, 1500)
             }
         }
 
-        if (enemy.getEnemies().length <= 0 && boss.getEnemies().length <= 0) {
-            level++;
-            app.stage.children.length = 0;
+        if (enemies.length <= 0) {
+            lvl++;
+            app.stage.children.length = 3;
+            app.stage.addChild(jet);
             app.stage.addChild(bg);
-            jet.addToStage();
             bg.position.set(0, 0);
             jet.getMissiles().length = 0;
             jet.updateHealth(1);
 
-            if (level % 5 === 0) {
-                updateLevel(level, boss);
-                boss.spawn(level);
+            if (lvl % 5 === 0) {
+                updateLevel(lvl, boss);
+                boss.spawn(lvl);
                 boss.setShouldSpawn(false);
             }
             else {
-                updateLevel(level, enemy);
-                enemy.spawn(level);
+                updateLevel(lvl, enemy);
+                enemy.spawn(lvl);
                 enemy.setShouldSpawn(false);
             }
         }

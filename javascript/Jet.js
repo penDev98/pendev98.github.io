@@ -1,56 +1,50 @@
-class Jet {
-    constructor(x, y, scale, health, texture) {
-        this.texture = new Sprite(resources[texture].texture);
-        this.texture.anchor.set(0.5, 0.5);
-        this.texture.position.set(x, y);
-        this.texture.scale.set(scale, scale);
-        this.x = this.texture.x;
-        this.y = this.texture.y;
-        this.health = health;
-        this.healthArray = [];
+class Jet extends PIXI.Sprite {
+    constructor(parent) {
+        super(resources["assets/spaceship.png"].texture);
+
+        this.scale.set(0.15);
+        this.anchor.set(0.5);
         this.vx = 0;
-        this.vy = 0;
+        this.score = 0;
+        this.lostGame = false;
+
+        this.health = 4;
+        this.healthArray = [];
+
+        this.parentContainer = parent;
+
+        this.position.y = parent.screen.height - (this.height / 2);
+        this.position.x = parent.screen.width / 2;
+
         this.missiles = [];
+
         this.shaking = false;
         this.speed = 0;
+        this.damage = 1;
         this.continue = true;
-        this.shootSound = new Howl({ src: ['assets/sounds/laser1.mp3'] });
+
         this.missileSound = new Howl({ src: ['assets/sounds/missileShort.mp3'] });
-        this.explosion = new Howl({ src: ['assets/sounds/jetDamage.mp3'] });
-        this.explosion.volume(0.2);
+        this.explosion = new Howl({ src: ['assets/sounds/jetDamage.mp3'], volume: 0.2 });
         this.damageSound = new Howl({ src: ['assets/sounds/jetDamage.mp3'] });
+        this.shootsound = new Howl({ src: ['assets/sounds/laser1.mp3'] });
+
+        parent.stage.addChild(this);
     }
 
     restart() {
-        this.health = 0;
-        this.updateHealth(4);
+        this.health = 4;
+        this.speed = 0;
+        this.score = 0;
+        this.damage = 1;
+        this.updateHealth(0);
         this.x = app.view.width / 2;
         this.y = app.view.height - 75
         this.missiles = [];
     }
 
-    addToStage() {
-        app.stage.addChild(this.texture);
-    }
-
-    shouldStartShaking() {
-        return this.shaking;
-    }
-
-    startShaking() {
-        this.shaking = true;
-    }
-
-    shake() {
-        this.texture.position.x += randomInt(-1, 1);
-    }
-
-    stopShaking() {
-        setTimeout(() => this.shaking = false, 200)
-    }
-
     updateSpeed(score) {
         this.speed = Math.floor(score / 10000);
+        this.damage = Math.floor(score / 3000) + 1;
     }
 
     getHealth() {
@@ -74,14 +68,14 @@ class Jet {
     }
 
     animate(width) {
-        if (this.texture.x <= 10) {
-            this.texture.x = 10;
+        if (this.x <= 10) {
+            this.x = 10;
         }
-        if (this.texture.x >= width - 10) {
-            this.texture.x = width - 10;
+        if (this.x >= width - 10) {
+            this.x = width - 10;
         }
-        this.texture.x += this.vx;
-        this.x = this.texture.x;
+        this.x += this.vx;
+        this.x = this.x;
     }
 
     move(vx) {
@@ -93,7 +87,6 @@ class Jet {
     }
 
     animateHealth() {
-
         if (this.continue) {
             let yPos = 25;
             let xPos = (window.innerWidth / 2) + 40;
@@ -125,18 +118,19 @@ class Jet {
         this.health += amount;
         const health = document.getElementById("health");
 
-        let removeItem = (array, item) => {
-            array[item].removeSelf();
-            array.pop();
-            this.continue = true;
+        let removeItem = (array) => {
+            if (array.length >= 1) {
+                array[array.length - 1].removeSelf();
+                array.pop();
+                this.continue = true;
+            }
         }
 
         if (amount < 0) {
             if (this.health >= 1) {
                 TweenMax.to(this.healthArray[this.health], 1, { y: -50, ease: Power2.easeOut, onStart: this.continue = false, onComplete: removeItem, onCompleteParams: [this.healthArray, this.health] })
             } else {
-                this.healthArray[this.health].removeSelf();
-                this.healthArray.pop();
+                removeItem(this.healthArray);
             }
         }
 
@@ -145,134 +139,14 @@ class Jet {
     }
 
     shoot() {
-        this.shootBullet()
+        this.shootsound.play();
+        shootBullet("assets/bullet.png", this, this.damage)
         for (let i = 1; i <= this.speed; i++) {
-            setTimeout(() => this.shootBullet(), 300 / (i * 2));
+            setTimeout(() => {shootBullet("assets/bullet.png", this, this.damage); this.shootsound.play()}, 300 / (i * 2));
             if (this.speed >= 2) {
-                this.shootMissile();
                 this.missileSound.play();
-                setTimeout(() => this.shootMissile(), 300 / i * 2);
-            }
-        }
-    }
-
-    shootBullet() {
-        this.shootSound.play();
-        let bullet = new Sprite(resources["assets/bullet.png"].texture);
-        bullet.rotation = 3.15;
-        bullet.anchor.set(0.5, 0);
-        bullet.scale.set(0.06, 0.06);
-        bullet.vy = 20;
-        bullet.zIndex = 2;
-        bullet.position.y = app.view.height - 100;
-        bullet.position.x = this.x;
-
-        app.stage.addChild(bullet);
-        bullet.removeSelf = () => {
-            app.stage.removeChild(bullet);
-        }
-
-        this.missiles.push(bullet);
-        app.stage.updateLayersOrder();
-    }
-
-    shootMissile() {
-        let missile1 = new Sprite(resources["assets/missile.png"].texture);
-        let missile2 = new Sprite(resources["assets/missile.png"].texture);
-        missile1.anchor.set(0.5, 0);
-        missile1.scale.set(0.06, 0.06);
-        missile2.anchor.set(0.5, 0);
-        missile2.scale.set(0.06, 0.06);
-
-        missile1.vy = 10;
-        missile2.vy = 10;
-
-        missile1.zIndex = 2;
-        missile2.zIndex = 2;
-
-        missile1.position.y = app.view.height - 30;
-        missile2.position.y = app.view.height - 30;
-
-        app.stage.addChild(missile1, missile2);
-        missile1.position.x = this.texture.position.x - 45;
-        missile2.position.x = this.texture.position.x + 45;
-
-        missile1.removeSelf = () => {
-            app.stage.removeChild(missile1);
-        }
-
-        missile2.removeSelf = () => {
-            app.stage.removeChild(missile2);
-        }
-
-        this.missiles.push(missile1);
-        this.missiles.push(missile2);
-        app.stage.updateLayersOrder();
-    }
-
-    shooting(enemy, level) {
-        for (let i = 0; i < this.missiles.length; i++) {
-            let m = this.missiles[i];
-
-            if (m.position.y > app.view.height - 100) {
-                if (i % 2 !== 0) {
-                    m.position.x = this.x - 45;
-                }
-                else m.position.x = this.x + 45;
-            }
-
-            m.vy += 0.2;
-            m.y -= m.vy;
-
-            if (m.position.y < -100) {
-                addScore(-10)
-                this.updateSpeed(score);
-                m.removeSelf();
-                this.missiles.splice(i, 1);
-                if (i > 0) {
-                    i--;
-                }
-            }
-
-            for (let j = 0; j < enemy.getEnemies().length; j++) {
-                const e = enemy.getEnemies()[j];
-
-                if (m.position.y < e.position.y - enemy.getHeight() / 2 && m.position.y > e.position.y - enemy.getHeight() && m.position.x > e.position.x - enemy.getWidth() && m.position.x < e.position.x + enemy.getWidth()) {
-                    try {
-                        m.removeSelf();
-                        this.missiles.splice(i, 1);
-                        if (i > 0) {
-                            i--;
-                        }
-
-                        const explosionTextures = [];
-                        let k;
-
-                        for (k = 0; k < 26; k++) {
-                            const texture = PIXI.Texture.from(`Explosion_Sequence_A ${k + 1}.png`);
-                            explosionTextures.push(texture);
-                        }
-
-                        const explosion = new PIXI.AnimatedSprite(explosionTextures);
-                        let randomScale = randomInt(3, 4) / 10;
-                        explosion.scale.set(randomScale, randomScale);
-                        explosion.position.set(e.x - 40, m.y + 20)
-                        explosion.gotoAndPlay(1);
-                        explosion.removeSelf = () => {
-                            app.stage.removeChild(explosion);
-                        }
-                        setTimeout(() => { explosion.stop(); explosion.removeSelf() }, 400)
-                        app.stage.addChild(explosion);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                    enemy.getEnemies()[j].health -= level;
-                    this.explosion.play();
-                    addScore(10);
-                    this.updateSpeed(score);
-                    enemy.getEnemies()[j].shake = true;
-                    stopShaking(enemy.getEnemies()[j]);
-                }
+                setTimeout(() => shootBullet("assets/missile.png", this, this.damage, 'left'), 300 / i * 2);
+                setTimeout(() => shootBullet("assets/missile.png", this, this.damage, 'right'), 300 / i * 2);
             }
         }
     }

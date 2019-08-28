@@ -2,13 +2,25 @@ let score = 0;
 
 let randomEnemy;
 
-const level = document.getElementById('level');
+const levelElement = document.getElementById('level');
 const health = document.getElementById('health');
 const scoreElement = document.getElementById('score');
 const loadText = document.getElementById('loader');
 const startBtn = document.getElementById('begin');
 const endBtn = document.getElementById('end');
 const muteBtn = document.getElementById('mute-btn');
+
+const enemies = [];
+
+const shootBullet = (type, jet, damage, side) => {
+    let bullet = new Bullet(app, resources[type].texture, jet, side, addBullet);
+    function addBullet(){
+        return bullet.shoot(enemies, damage)
+    }
+    app.ticker.add(addBullet);
+
+    app.stage.updateLayersOrder();
+}
 
 startBtn.addEventListener('mouseover', () => {
     TweenLite.to(startBtn, 0.1, { scale: 1.2, ease: Power2.easeOut });
@@ -26,41 +38,34 @@ endBtn.addEventListener('mouseout', () => {
     TweenLite.to(endBtn, 0.1, { scale: 1, ease: Power2.easeOut });
 });
 
-TweenLite.to(loadText, 1.5, { scale: 3, opacity: 0, ease: Power4.easeIn });
+TweenLite.to(loadText, 2.5, { scale: 3, opacity: 0, ease: Power4.easeIn });
 
 setTimeout(() => {
     loadText.style.display = "none";
     startBtn.style.display = "block";
 
-    TweenLite.from(startBtn, 1.5, { scale: 0, opacity: 0, ease: Power4.easeOut });
-}, 1500)
+    TweenLite.from(startBtn, 2.5, { scale: 0, opacity: 0, ease: Power4.easeOut });
+}, 2500)
 
 const startSound = new Howl({ src: ['assets/sounds/rez-drone-looping.mp3'] });
 startSound.play()
 
 const gameOverSound = new Howl({ src: ['assets/sounds/gameover.mp3'] });
 
-let shootsound = new Howl({ src: ['assets/sounds/cannon.mp3'] });
-shootsound.volume(0.3);
-
 startSound.loop(true);
 
 const intervals = [];
 
 const updateLevel = (lvl, enemy) => {
-    level.innerHTML = `Level ${lvl}`;
-    if (level % 2 === 0) {
-        enemy.texture = "assets/enemy2.png";
-    }
+    levelElement.innerHTML = `Level ${lvl}`;
 
-    TweenLite.to(level, 1, { y: window.innerHeight / 2, x: -window.innerWidth / 3, scale: 5, ease: Power1.easeOut });
-    TweenLite.to(level, 1, { y: 100, x: 0, scale: 1, ease: Power1.easeOut, delay: 2 });
+    TweenLite.to(levelElement, 1, { y: window.innerHeight / 2, x: -window.innerWidth / 3, scale: 5, ease: Power1.easeOut });
+    TweenLite.to(levelElement, 1, { y: 100, x: 0, scale: 1, ease: Power1.easeOut, delay: 2 });
 
     intervals.push(setInterval(() => {
-        randomEnemy = randomInt(0, enemy.getEnemies().length - 1);
+        randomEnemy = randomInt(0, enemies.length - 1);
         try {
-            enemy.getEnemies()[randomEnemy].shoot();
-            shootsound.play();
+            enemies[randomEnemy].shoot();
         } catch (e) {
             console.log(e)
         }
@@ -88,16 +93,16 @@ const startGame = (jet, enemy, boss) => {
 
     TweenLite.to(end, 1, { scale: 0, opacity: 0, ease: Power1.easeOut });
     startBtn.style.cursor = 'default';
-    TweenLite.to(level, 1, { y: 100, scale: 1, ease: Power1.easeOut });
+    TweenLite.to(levelElement, 1, { y: 100, scale: 1, ease: Power1.easeOut });
     TweenLite.to(scoreElement, 1, { y: 100, x: 0, scale: 1, ease: Power1.easeOut });
     TweenLite.to(health, 1, { y: 100, scale: 1, opacity: 1, ease: Power1.easeOut });
     TweenLite.to(startBtn, 1, { scale: 2, opacity: 0, ease: Power1.easeOut });
 
     if (jet.health !== undefined) {
         jet.restart();
-        level.innerHTML = 'Level 0';
-        TweenLite.to(level, 1, { y: 430, x: -350, scale: 5, ease: Power1.easeOut });
-        TweenLite.to(level, 1, { y: 100, x: 0, scale: 1, ease: Power1.easeOut, delay: 2 });
+        levelElement.innerHTML = 'Level 0';
+        TweenLite.to(levelElement, 1, { y: 430, x: -350, scale: 5, ease: Power1.easeOut });
+        TweenLite.to(levelElement, 1, { y: 100, x: 0, scale: 1, ease: Power1.easeOut, delay: 2 });
         score = 0;
         addScore(0);
         enemy.restart(2);
@@ -121,7 +126,7 @@ const stopGame = (jet, enemy, boss) => {
     })
 
     TweenLite.to(health, 1, { y: -100, scale: 0, opacity: 0, ease: Power1.easeIn });
-    TweenLite.to(level, 2, { scale: 0, ease: Power1.easeOut });
+    TweenLite.to(levelElement, 2, { scale: 0, ease: Power1.easeOut });
     TweenLite.to(scoreElement, 2, { y: (window.innerHeight / 2) + 150, x: (window.innerWidth / 3) - 40, scale: 1, ease: Power1.easeOut });
     TweenLite.to(end, 2, { scale: 1, opacity: 1, ease: Power1.easeIn });
 
