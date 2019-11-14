@@ -5,4 +5,4 @@ If anything goes wrong a good old refresh of the page should fix it :)
 
 Feel free to share your criticism and ideas.
 
-(the code is in urgent need of refactoring, don't judge)
+(the code is in an urgent need of refactoring, please don't judge)
